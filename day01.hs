@@ -10,4 +10,4 @@ part2 :: [Int] -> String
 part2 = (++) "Part 2: " <$> show . countIncreasing . map (sum . take 3) . tails
 
 countIncreasing :: [Int] -> Int
-countIncreasing l = length $ filter id $ zipWith (>) (drop 1 l) l
+countIncreasing = length . filter id . (zipWith (>) =<< drop 1)
