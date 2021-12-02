@@ -2,7 +2,7 @@ main :: IO ()
 main = interact (unlines . sequence [part1, part2] . map (parse . words) . lines)
 
 part1 :: [(Int, Int)] -> String
-part1 = (++) "Part 1: " <$> show . uncurry (*) . foldl add (0, 0)
+part1 = (++) "Part 1: " <$> show . uncurry (*) . foldl1 add
 
 part2 = (++) "Part 2: " <$> show . uncurry (*) . fst . foldl foldAim ((0, 0), 0)
   where
