@@ -7,16 +7,16 @@ import Data.List
 main = interact (unlines . sequence [part1, part2] . lines)
 
 part1 :: [String] -> String
-part1 = (++) "Part 1: " <$> show . product . map toDec . gammaAndEpsilon
+part1 = ("Part 1: " ++) . show . product . map toDec . gammaAndEpsilon
+
+gammaAndEpsilon :: [[Char]] -> [[Char]]
+gammaAndEpsilon = transpose . map (map head . sortOn length . group . sort . (++) "01") . transpose
 
 part2 :: [String] -> String
 part2 = ("Part 2: " ++) . show . liftM2 (*) oxygen co2
   where
     oxygen = toDec . supportRating mostCommon
     co2 = toDec . supportRating leastCommon
-
-gammaAndEpsilon :: [[Char]] -> [[Char]]
-gammaAndEpsilon = transpose . map (map head . sortOn length . group . sort . (++) "01") . transpose
 
 supportRating :: (String -> Char) -> [String] -> String
 supportRating criteria report = head $ go report 0
