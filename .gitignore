@@ -1,2 +1,4 @@
-*.o
-*.hi
+build
+day*
+!day*.*
+*.input
