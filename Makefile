@@ -15,7 +15,7 @@ watch:
 	@while true; do make -q || make; sleep 1; done
 
 %.input:
-	@[ "${AOC_COOKIE}" ] && curl -s -H "cookie: ${AOC_COOKIE}" https://adventofcode.com/$(YEAR)/day/$(shell echo $* | sed -r 's/.*day0?([0-9]+).*/\1/')/input > $@
+	@[ "${AOC_COOKIE}" ] && curl -s -H "cookie: ${AOC_COOKIE}" https://adventofcode.com/$(YEAR)/day/$(shell echo $* | sed -r 's/.*day0?([0-9]+).*/\1/')/input > $@ || exit 0
 
 build/%.output: % %.input
 	@./$< < $*.input > $@ && cat $@
