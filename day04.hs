@@ -10,11 +10,11 @@ type Card = [[Int]]
 type Drawn = [Int]
 
 main :: IO ()
-main = interact (unlines . sequence [part1, part2] . parseInput)
+main = interact (unlines . sequence [part1, part2] . uncurry playBingo . parseInput)
 
-part1, part2 :: ([Card], Drawn) -> String
-part1 = ("Part 1: " ++) . show . head . uncurry playBingo
-part2 = ("Part 2: " ++) . show . last . uncurry playBingo
+part1, part2 :: [Int] -> String
+part1 = ("Part 1: " ++) . show . head
+part2 = ("Part 2: " ++) . show . last
 
 playBingo :: [Card] -> Drawn -> [Int]
 playBingo cards drawn = map score $ catMaybes $ zipWith (\round n -> (,n) <$> find isWinner round) rounds drawn
