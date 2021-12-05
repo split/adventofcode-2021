@@ -11,7 +11,7 @@ main :: IO ()
 main = interact (unlines . sequence [part1, part2] . map parse . lines)
 
 part1, part2 :: [Line] -> String
-part1 = ("Part 1: " ++) . show . S.size . overlap . map points . filter isDiagonal
+part1 = ("Part 1: " ++) . show . S.size . overlap . map points . filter isPerpendicular
 part2 = ("Part 2: " ++) . show . S.size . overlap . map points
 
 overlap :: Ord a => [Set a] -> Set a
@@ -22,8 +22,8 @@ points (Line (x1, y1) (x2, y2)) = S.fromList $ zip (range x1 x2) (range y1 y2)
   where
     range a b = [a, a + signum (b - a) .. b]
 
-isDiagonal :: Line -> Bool
-isDiagonal (Line (x1, y1) (x2, y2)) = x1 == x2 || y1 == y2
+isPerpendicular :: Line -> Bool
+isPerpendicular (Line (x1, y1) (x2, y2)) = x1 == x2 || y1 == y2
 
 parse :: String -> Line
 parse = toLine . map (toPoint . map read . splitOn ",") . splitOn " -> "
