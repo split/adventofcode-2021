@@ -10,7 +10,7 @@ data Line = Line Point Point deriving (Eq, Show)
 main :: IO ()
 main = interact (unlines . sequence [part1, part2] . map parse . lines)
 
-part1, part2 :: [Line] -> [Char]
+part1, part2 :: [Line] -> String
 part1 = ("Part 1: " ++) . show . S.size . overlap . map points . filter isDiagonal
 part2 = ("Part 2: " ++) . show . S.size . overlap . map points
 
