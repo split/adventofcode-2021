@@ -1,13 +1,19 @@
+import Control.Monad (ap)
+import Data.List
 import Data.List.Split
 
 main :: IO ()
 main = interact (unlines . sequence [part1, part2] . map read . splitOn ",")
 
 part1, part2 :: [Int] -> [Char]
-part1 = ("Part 1: " ++) . show . minCost id
-part2 = ("Part 2: " ++) . show . minCost increasingCost
+part1 = ("Part 1: " ++) . show . ap (flip $ sumCost id) median
+part2 = ("Part 2: " ++) . show . ap (flip $ sumCost increasingCost) mean
   where
     increasingCost x = x * (x + 1) `div` 2
 
-minCost :: (Int -> Int) -> [Int] -> Int
-minCost cost xs = minimum $ map sum $ [map (cost . abs . subtract a) xs | a <- xs]
+sumCost :: (Int -> Int) -> Int -> [Int] -> Int
+sumCost cost to = sum . map (cost . abs . subtract to)
+
+median, mean :: [Int] -> Int
+median xs = sort xs !! (length xs `div` 2 - 1)
+mean xs = round $ realToFrac (sum xs) / genericLength xs
