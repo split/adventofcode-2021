@@ -19,7 +19,7 @@ decode :: [Set Char] -> [Set Char] -> Int
 decode = wireOutput . ap zip connectWires
   where
     wireOutput r = concatDigits . mapMaybe (`lookup` r)
-    connectWires = mapMaybe (flip elemIndex $ wires digits) . wires
+    connectWires = mapMaybe (`elemIndex` wires digits) . wires
 
 wires :: Ord a => [Set a] -> [(Int, Int)]
 wires signals = map (\d -> (count S.isSubsetOf d, count (flip S.isSubsetOf) d)) signals
