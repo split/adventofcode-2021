@@ -1,5 +1,3 @@
-{-# LANGUAGE TupleSections #-}
-
 import Control.Monad (ap)
 import Data.Foldable (foldl')
 import Data.List (elemIndex)
