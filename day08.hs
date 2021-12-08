@@ -16,13 +16,13 @@ part1 = ("Part 1: " ++) . show . length . filter ((`elem` lengths) . length) . c
 part2 = ("Part 2: " ++) . show . sum . map (uncurry decode)
 
 decode :: [Set Char] -> [Set Char] -> Int
-decode = wireOutput . ap zip unwireConnections
+decode = wireOutput . ap zip connectWires
   where
     wireOutput r = concatDigits . mapMaybe (`lookup` r)
-    unwireConnections = mapMaybe (flip elemIndex $ connections digits) . connections
+    connectWires = mapMaybe (flip elemIndex $ wires digits) . wires
 
-connections :: Ord a => [Set a] -> [(Int, Int)]
-connections signals = map (\d -> (count S.isSubsetOf d, count (flip S.isSubsetOf) d)) signals
+wires :: Ord a => [Set a] -> [(Int, Int)]
+wires signals = map (\d -> (count S.isSubsetOf d, count (flip S.isSubsetOf) d)) signals
   where
     count f d = length $ filter (f d) signals
 
