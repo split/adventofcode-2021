@@ -18,9 +18,9 @@ part1 = ("Part 1: " ++) . show . length . filter ((`elem` lengths) . length) . c
 part2 = ("Part 2: " ++) . show . sum . map (uncurry decode)
 
 decode :: [Set Char] -> [Set Char] -> Int
-decode p output = wireOutput $ ap zip unwireConnections p
+decode = wireOutput . ap zip unwireConnections
   where
-    wireOutput r = concatDigits $ mapMaybe (`lookup` r) output
+    wireOutput r = concatDigits . mapMaybe (`lookup` r)
     unwireConnections = mapMaybe (flip elemIndex $ connections digits) . connections
 
 connections :: Ord a => [Set a] -> [(Int, Int)]
