@@ -17,7 +17,7 @@ main = interact (unlines . sequence [part1, part2] . grid . lines)
 
 part1, part2 :: Grid Int -> String
 part1 = ("Part 1: " ++) . show . sum . map (+ 1) . M.elems . lowPoints
-part2 grid = ("Part 2: " ++) . show $ product $ take 3 . sortOn Down . map (M.size . getBasin grid) $ separate $ lowPoints grid
+part2 = ("Part 2: " ++) . show . product . take 3 . sortOn Down . ap (map . (M.size .) . getBasin) (separate . lowPoints)
 
 lowPoints :: Grid Int -> Grid Int
 lowPoints grid = M.filterWithKey (\c h -> all (> h) (neighbors grid c)) grid
