@@ -10,9 +10,7 @@ main :: IO ()
 main = interact (unlines . sequence [part1, part2] . map parse . lines)
 
 part1, part2 :: [([Set Char], [Set Char])] -> String
-part1 = ("Part 1: " ++) . show . length . filter ((`elem` lengths) . length) . concatMap snd
-  where
-    lengths = length . (digits !!) <$> [1, 4, 7, 8]
+part1 = ("Part 1: " ++) . show . length . filter ((`elem` map digitLen [1, 4, 7, 8]) . length) . concatMap snd
 part2 = ("Part 2: " ++) . show . sum . map (uncurry decode)
 
 decode :: [Set Char] -> [Set Char] -> Int
@@ -45,6 +43,9 @@ wires signals = map (\d -> (count S.isSubsetOf d, count (flip S.isSubsetOf) d)) 
 --  gggg    gggg    ....    gggg    gggg
 digits :: [Set Char]
 digits = map S.fromAscList ["abcefg", "cf", "acdeg", "acdfg", "bcdf", "abdfg", "abdefg", "acf", "abcdefg", "abcdfg"]
+
+digitLen :: Int -> Int
+digitLen = length . (digits !!)
 
 parse :: String -> ([Set Char], [Set Char])
 parse = (\[a, b] -> (a, b)) <$> map (map S.fromList . words) . splitOn " | "
