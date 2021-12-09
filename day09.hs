@@ -30,16 +30,13 @@ getBasin grid = growBasin M.empty
       | otherwise = ap growBasin (nextBasin newBasin) (M.union basin newBasin)
     nextBasin = (M.\\) . M.foldrWithKey ((flip M.union .) . slope) M.empty
       where
-        slope coord value = M.filter (\v -> v > value && v < 9) (neighborGrid grid coord)
+        slope coord value = M.filter (\v -> v > value && v < 9) (neighbors grid coord)
 
 grid :: [String] -> Grid Int
 grid rows = M.fromList [((x, y), digitToInt col) | (cols, y) <- zip rows [0 ..], (col, x) <- zip cols [0 ..]]
 
-neighbors :: Grid a -> Coord -> [a]
-neighbors = (M.elems .) . neighborGrid
-
-neighborGrid :: Grid a -> Coord -> Grid a
-neighborGrid grid coord = M.fromList $ mapMaybe ((\c -> (c,) <$> M.lookup c grid) . add coord) [(0, 1), (1, 0), (0, -1), (-1, 0)]
+neighbors :: Grid a -> Coord -> Grid a
+neighbors grid coord = M.fromList $ mapMaybe ((\c -> (c,) <$> M.lookup c grid) . add coord) [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
 separate :: Grid a -> [Grid a]
 separate = M.foldrWithKey (\k v b -> b ++ [M.singleton k v]) []
