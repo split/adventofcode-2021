@@ -1,3 +1,4 @@
+import Control.Arrow ((&&&))
 import Control.Monad (ap)
 import Data.Foldable (foldl')
 import Data.List (elemIndex)
@@ -20,9 +21,9 @@ decode = wireOutput . ap zip connectWires
     connectWires = mapMaybe (`elemIndex` wires digits) . wires
 
 wires :: Ord a => [Set a] -> [(Int, Int)]
-wires signals = map (\d -> (count S.isSubsetOf d, count (flip S.isSubsetOf) d)) signals
+wires signals = map ((count . S.isSubsetOf) &&& (count . flip S.isSubsetOf)) signals
   where
-    count f d = length $ filter (f d) signals
+    count = length . (`filter` signals)
 
 --   0:      1:      2:      3:      4:
 --  aaaa    ....    aaaa    aaaa    ....
