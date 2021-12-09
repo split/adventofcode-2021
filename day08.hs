@@ -21,7 +21,7 @@ decode = wireOutput . ap zip connectWires
     connectWires = mapMaybe (`elemIndex` wires digits) . wires
 
 wires :: Ord a => [Set a] -> [(Int, Int)]
-wires signals = map ((count . S.isSubsetOf) &&& (count . flip S.isSubsetOf)) signals
+wires signals = map (count . S.isSubsetOf &&& count . flip S.isSubsetOf) signals
   where
     count = length . (`filter` signals)
 
