@@ -28,4 +28,4 @@ sumScore = foldl (\p v -> 5 * p + v + 1) 0 . mapMaybe (`elemIndex` map fst score
 
 middle :: [a] -> a
 middle l@(_ : _ : _ : _) = middle $ tail $ init l
-middle (x : _) = x
+middle [x] = x
