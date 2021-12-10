@@ -2,7 +2,7 @@ import Data.List (elemIndex, sort)
 import Data.Maybe (isNothing, mapMaybe)
 
 main :: IO ()
-main = interact (unlines . sequence [part1 . map (parse ""), part2 . map (parse "")] . lines)
+main = interact (unlines . sequence [part1, part2] . map (parse "") . lines)
 
 part1, part2 :: [(Maybe Char, String)] -> [Char]
 part1 = ("Part 1: " ++) . show . sum . mapMaybe (`lookup` scores) . mapMaybe fst
