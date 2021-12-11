@@ -13,7 +13,7 @@ main = interact (unlines . sequence [part1, part2] . grid . lines)
 
 part1, part2 :: Grid Int -> [Char]
 part1 = ("Part 1: " ++) . show . sum . map (M.size . M.filter (== 0)) . take 101 . iterate simulate
-part2 = ("Part 2: " ++) . show . length . takeWhile ((> 0) . sum) . iterate simulate
+part2 = ("Part 2: " ++) . show . length . takeWhile (any (> 0)) . iterate simulate
 
 simulate :: Grid Int -> Grid Int
 simulate = flash . M.map (+ 1)
