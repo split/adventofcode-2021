@@ -21,11 +21,13 @@ simulate = flash . M.map (+ 1)
 flash :: Grid Int -> Grid Int
 flash grid
   | S.null pointsToFlash = grid
-  | otherwise = flash $ updateG grid
+  | otherwise = flash $ update grid
   where
     pointsToFlash = M.keysSet $ M.filter (> 9) grid
     receivesEnergy = concatMap adjacent pointsToFlash
-    updateG grid = foldr' (`M.insert` 0) (foldr' (M.adjust (\v -> if v > 0 then v + 1 else 0)) grid receivesEnergy) pointsToFlash
+    update = flashPoints pointsToFlash . transmitEnergy receivesEnergy
+    flashPoints = flip (foldr' (`M.insert` 0))
+    transmitEnergy = flip (foldr' (M.adjust (\v -> if v > 0 then v + 1 else 0)))
 
 grid :: [String] -> Grid Int
 grid rows = M.fromList [((y, x), digitToInt col) | (cols, y) <- zip rows [0 ..], (col, x) <- zip cols [0 ..]]
