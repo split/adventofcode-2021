@@ -11,7 +11,7 @@ type Grid a = Map Point a
 
 main = interact (unlines . sequence [part1, part2] . grid . lines)
 
-part1, part2 :: Grid Int -> [Char]
+part1, part2 :: Grid Int -> String
 part1 = ("Part 1: " ++) . show . sum . map (M.size . M.filter (== 0)) . take 101 . iterate simulate
 part2 = ("Part 2: " ++) . show . length . takeWhile (any (> 0)) . iterate simulate
 
