@@ -1,4 +1,3 @@
-import Data.Bifunctor (bimap)
 import Data.Char (digitToInt)
 import Data.Foldable (Foldable (foldr'))
 import Data.Map (Map)
@@ -32,4 +31,4 @@ flash grid
 grid :: [String] -> Grid Int
 grid rows = M.fromList [((y, x), digitToInt col) | (cols, y) <- zip rows [0 ..], (col, x) <- zip cols [0 ..]]
 
-adjacent (x, y) = map (bimap (+ x) (+ y)) [(0, 1), (1, 0), (0, -1), (-1, 0), (1, -1), (1, 1), (-1, 1), (-1, -1)]
+adjacent (x, y) = [(x + dx, y + dy) | dx <- [-1 .. 1], dy <- [-1 .. 1], (dx, dy) /= (0, 0)]
