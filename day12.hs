@@ -24,7 +24,7 @@ exploreCaves twice caves = go [["start"]]
       where
         possibleCaves = maybe S.empty (S.filter (\c -> c `notElem` path || all isUpper c || canVisitTwice c)) (M.lookup cave caves)
         newPaths = map (: path) (S.toList possibleCaves) ++ paths
-        canVisitTwice cave = twice && cave /= "start" && hasNotVisitedTwice (init (tail path))
+        canVisitTwice cave = twice && cave /= "start" && hasNotVisitedTwice path
 
 hasNotVisitedTwice :: [String] -> Bool
 hasNotVisitedTwice [] = True
