@@ -29,7 +29,7 @@ exploreCaves twice caves = go [["start"]]
 hasNotVisitedTwice :: [String] -> Bool
 hasNotVisitedTwice [] = True
 hasNotVisitedTwice (x : xs)
-  | isLower (head x) && x `elem` xs = False
+  | any isLower x && x `elem` xs = False
   | otherwise = hasNotVisitedTwice xs
 
 parseCaves :: String -> Caves
