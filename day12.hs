@@ -22,9 +22,9 @@ exploreCaves twice caves = go [["start"]]
       | cave == "end" = path : go paths
       | otherwise = go newPaths
       where
-        possibleCaves = maybe S.empty (S.filter (\c -> c `notElem` path || all isUpper c || canVisitTwice c)) (M.lookup cave caves)
+        possibleCaves = maybe S.empty (S.filter canEnter) (M.lookup cave caves)
+        canEnter c = c `notElem` path || all isUpper c || twice && hasNotVisitedTwice path
         newPaths = map (: path) (S.toList possibleCaves) ++ paths
-        canVisitTwice cave = twice && cave /= "start" && hasNotVisitedTwice path
 
 hasNotVisitedTwice :: [String] -> Bool
 hasNotVisitedTwice [] = True
@@ -33,7 +33,9 @@ hasNotVisitedTwice (x : xs)
   | otherwise = hasNotVisitedTwice xs
 
 parseCaves :: String -> Caves
-parseCaves = foldl' parseCave M.empty . map (splitOn "-") . lines
+parseCaves = foldr (parseCave . splitOn "-") M.empty . lines
   where
     addCave s e = M.insertWith S.union s (S.singleton e)
-    parseCave m (s : e : _) = addCave s e (addCave e s m)
+    parseCave (s : e : _)
+      | s == "start" = addCave s e -- no going back
+      | otherwise = addCave s e . addCave e s
