@@ -4,7 +4,7 @@ import Data.List.Split (splitOn)
 import Data.Set (Set)
 import qualified Data.Set as S
 
-data Fold = FoldLeft Int | FoldTop Int deriving (Show)
+data Fold = FoldLeft Int | FoldUp Int deriving (Show)
 
 type Coord = (Int, Int)
 
@@ -21,7 +21,7 @@ paperFolds = scanl (flip foldPaper)
 
 foldPaper :: Fold -> Paper -> Paper
 foldPaper (FoldLeft a) = S.map (first $ foldSide a)
-foldPaper (FoldTop a) = S.map (second $ foldSide a)
+foldPaper (FoldUp a) = S.map (second $ foldSide a)
 
 foldSide a xy = if a >= xy then xy else abs (xy - a * 2)
 
@@ -32,7 +32,7 @@ parse = parseChunks . map lines . splitOn "\n\n"
     parseFold = foldToCoord . splitOn "=" . last . words
     parseDot = dotToCoord . splitOn ","
     foldToCoord ("x" : x : _) = FoldLeft (read x)
-    foldToCoord ("y" : y : _) = FoldTop (read y)
+    foldToCoord ("y" : y : _) = FoldUp (read y)
     foldToCoord _ = error "Invalid data"
     dotToCoord (x : y : _) = (read x, read y)
     dotToCoord _ = error "Invalid data"
