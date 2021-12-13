@@ -38,8 +38,7 @@ parse = parseChunks . map lines . splitOn "\n\n"
     dotToCoord _ = error "Invalid data"
 
 showPaper :: Paper -> [String]
-showPaper p = [showLine y | y <- [0 .. maxY]]
+showPaper paper = map showLine [0 .. max snd]
   where
-    showLine y = [maybe '.' (const '#') (S.lookupIndex (x, y) p) | x <- [0 .. maxX]]
-    maxX = maximum $ map fst $ S.toList p
-    maxY = maximum $ map snd $ S.toList p
+    showLine y = [maybe '.' (const '#') (S.lookupIndex (x, y) paper) | x <- [0 .. max fst]]
+    max f = S.findMax $ S.map f paper
