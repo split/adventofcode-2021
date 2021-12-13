@@ -23,7 +23,7 @@ foldPaper :: Fold -> Paper -> Paper
 foldPaper (FoldLeft a) = S.map (first $ foldSide a)
 foldPaper (FoldUp a) = S.map (second $ foldSide a)
 
-foldSide a xy = if a >= xy then xy else abs (xy - a * 2)
+foldSide a xy = if a >= xy then xy else a * 2 - xy
 
 parse :: String -> (Paper, [Fold])
 parse = parseChunks . map lines . splitOn "\n\n"
