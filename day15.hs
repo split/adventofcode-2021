@@ -3,7 +3,7 @@
 import Data.Char (digitToInt)
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as M
-import Data.Maybe ( mapMaybe )
+import Data.Maybe (mapMaybe)
 import Data.Heap (Heap)
 import qualified Data.Heap as H
 import Data.Tuple (swap)
@@ -34,7 +34,7 @@ dijkstra grid start end = dijkstra' initialHeap initialDistances
         else
           let safer = M.differenceWith pickSafer (neighbors point distances) grid
               pickSafer d risk = if d > dist + risk then Just (dist + risk) else Nothing
-           in dijkstra' (H.union (toHeap safer) heap') (M.union safer distances)
+           in dijkstra' (toHeap safer <> heap') (safer <> distances)
 
 
 rollingRisk :: Int -> Int
