@@ -57,13 +57,6 @@ addRight, addLeft :: Int -> SnailNum Int -> Maybe (SnailNum Int)
 addLeft vl = alterR (\(Val v) -> Just (Val (v + vl)))
 addRight vr = alterL (\(Val v) -> Just (Val (v + vr)))
 
--- >>> addToFirst 3 [Val 6 :^: Val 9, Val 3, Val 5]
--- [[6,9],6,5]
-addToFirst :: Integral t => t -> [SnailNum t] -> [SnailNum t]
-addToFirst v ((Val n) : xs) = Val (n + v) : xs
-addToFirst v (p : xs) = p : addToFirst v xs
-addToFirst _ [] = []
-
 -- >>> splitSN (Val 12)
 -- Just [6,6]
 splitSN :: Integral a => SnailNum a -> Maybe (SnailNum a)
