@@ -33,7 +33,7 @@ reduceSN sn = case explodeSN sn of
 -- >>> explodeSN $ parseSN "[[[[0,7],4],[7,[[8,4],9]]],[1,1]]"
 -- Just [[[[0,7],4],[[7,8],[0,13]]],[1,1]]
 explodeSN :: SnailNum Int -> Maybe (SnailNum Int)
-explodeSN x = (fst <$>) $ go 0 x
+explodeSN = (fst <$>) . go 0
   where
     go 4 (Val lv :^: Val rv) = Just (Val 0, (Just lv, Just rv))
     go 4 _ = Nothing
@@ -54,10 +54,8 @@ explodeSN x = (fst <$>) $ go 0 x
 -- >>> addLeft 3 $ parseSN "[[3,8],[1,1]]"
 -- Just [[3,8],[1,4]]
 addRight, addLeft :: Int -> SnailNum Int -> Maybe (SnailNum Int)
-addLeft vl (l :^: r) = msum [(l :^:) <$> addLeft vl r, (:^: r) <$> addLeft vl l]
-addLeft vl (Val v) = Just (Val (v + vl))
-addRight vr (l :^: r) = msum [(:^: r) <$> addRight vr l, (l :^:) <$> addRight vr r]
-addRight vr (Val v) = Just (Val (v + vr))
+addLeft vl = alterR (\(Val v) -> Just (Val (v + vl)))
+addRight vr = alterL (\(Val v) -> Just (Val (v + vr)))
 
 -- >>> addToFirst 3 [Val 6 :^: Val 9, Val 3, Val 5]
 -- [[6,9],6,5]
@@ -69,10 +67,11 @@ addToFirst _ [] = []
 -- >>> splitSN (Val 12)
 -- Just [6,6]
 splitSN :: Integral a => SnailNum a -> Maybe (SnailNum a)
-splitSN (l :^: r) = msum [(:^: r) <$> splitSN l, (l :^:) <$> splitSN r]
-splitSN (Val n)
-  | n > 9 = Just (Val (n `div` 2) :^: Val ((n + 1) `div` 2))
-  | otherwise = Nothing
+splitSN = alterL splitRule
+  where
+    splitRule (Val n)
+      | n > 9 = Just (Val (n `div` 2) :^: Val ((n + 1) `div` 2))
+      | otherwise = Nothing
 
 -- >>> parseSN "[[[[2,4],7],[6,[0,5]]],[[[6,8],[2,8]],[[2,1],[4,5]]]]"
 -- [[[[2,4],7],[6,[0,5]]],[[[6,8],[2,8]],[[2,1],[4,5]]]]
@@ -92,3 +91,9 @@ instance (Show a) => Show (SnailNum a) where
 
 pairs :: [SnailNum a] -> [SnailNum a]
 pairs l = concat [[x :^: y, y :^: x] | (x : ys) <- tails l, y <- ys]
+
+alterL f (l :^: r) = msum [(:^: r) <$> alterL f l, (l :^:) <$> alterL f r]
+alterL f sn@(Val _) = f sn
+
+alterR f (l :^: r) = msum [(l :^:) <$> alterR f r, (:^: r) <$> alterR f l]
+alterR f sn@(Val _) = f sn
