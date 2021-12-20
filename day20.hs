@@ -10,20 +10,20 @@ type Pixel = (Int, Int)
 
 type Image = Set Pixel
 
-main = interact (unlines . sequence [part1, part2] . parse)
+main = interact (unlines . sequence [part1, part2] . enhance . parse)
 
-part1, part2 :: (Image, [Bool]) -> [Char]
-part1 = ("Part 1: " ++) . show . S.size . enhanceN 2
-part2 = ("Part 2: " ++) . show . S.size . enhanceN 50
+part1, part2 :: [Image] -> String
+part1 = ("Part 1: " ++) . show . S.size . (!! 2)
+part2 = ("Part 2: " ++) . show . S.size . (!! 50)
 
-enhanceN :: Int -> (Image, [Bool]) -> Image
-enhanceN n (image, algo) = (!! n) $ scanl (flip (enhancement algo)) image spaces
+enhance :: (Image, [Bool]) -> [Image]
+enhance (image, algo) = scanl (flip (enhancementStep algo)) image spaces
   where
     spaces = if head algo then ap zip tail rotatingSpaces else repeat (False, False)
     rotatingSpaces = cycle [head algo, algo !! 511]
 
-enhancement :: [Bool] -> (Bool, Bool) -> Image -> Image
-enhancement algo (space, prevSpace) image = S.filter (\px -> prevSpace /= (algo !! mask px space image)) affected
+enhancementStep :: [Bool] -> (Bool, Bool) -> Image -> Image
+enhancementStep algo (space, prevSpace) image = S.filter (\px -> prevSpace /= (algo !! mask px space image)) affected
   where
     affected = S.unions (S.map (S.fromList . win3x3) image)
 
