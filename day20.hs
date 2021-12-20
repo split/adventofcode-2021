@@ -23,7 +23,7 @@ enhance (image, algo) = scanl (flip (enhancementStep algo)) image spaces
     rotatingSpaces = cycle [head algo, algo !! 511]
 
 enhancementStep :: [Bool] -> (Bool, Bool) -> Image -> Image
-enhancementStep algo (space, prevSpace) image = S.filter (\px -> prevSpace /= (algo !! mask px space image)) affected
+enhancementStep algo (prevSpace, space) image = S.filter (\px -> prevSpace /= (algo !! mask px space image)) affected
   where
     affected = S.unions (S.map (S.fromList . win3x3) image)
 
