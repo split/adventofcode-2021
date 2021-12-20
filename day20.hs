@@ -19,8 +19,7 @@ part2 = ("Part 2: " ++) . show . S.size . (!! 50)
 enhance :: (Image, [Bool]) -> [Image]
 enhance (image, algo) = scanl (flip (enhancementStep algo)) image spaces
   where
-    spaces = if head algo then ap zip tail rotatingSpaces else repeat (False, False)
-    rotatingSpaces = cycle [head algo, algo !! 511]
+    spaces = ap zip tail (cycle [head algo, head algo && algo !! 511])
 
 enhancementStep :: [Bool] -> (Bool, Bool) -> Image -> Image
 enhancementStep algo (prevSpace, space) image = S.filter (\px -> prevSpace /= (algo !! mask px space image)) affected
