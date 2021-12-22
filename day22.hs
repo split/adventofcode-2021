@@ -1,3 +1,5 @@
+{-# LANGUAGE RecordWildCards #-}
+
 module Main where
 
 import Control.Monad (ap)
@@ -45,7 +47,7 @@ intersects :: Cuboid -> Cuboid -> Bool
 a `intersects` b = x2 a >= x1 b && x2 b >= x1 a && y2 a >= y1 b && y2 b >= y1 a && z2 a >= z1 b && z2 b >= z1 a
 
 volume :: Cuboid -> Int
-volume (Cuboid x1 x2 y1 y2 z1 z2 on) = (x2 - x1 + 1) * (y2 - y1 + 1) * (z2 - z1 + 1) * bool (-1) 1 on
+volume Cuboid {..} = (x2 - x1 + 1) * (y2 - y1 + 1) * (z2 - z1 + 1) * bool (-1) 1 on
 
 invert :: Cuboid -> Cuboid
 invert cuboid = cuboid {on = not (on cuboid)}
