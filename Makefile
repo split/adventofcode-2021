@@ -22,7 +22,7 @@ build/%.output: % %.input
 
 build/%.example.output: % %.example
 	@grep -v Part $*.example | ./$< > $@
-	@grep Part $*.example | diff -u $@ - && echo $* example is valid
+	@grep Part $*.example | diff -u - $@ && echo $* example is valid
 
 %:: %.hs
 	@ghc -outputdir build $(FLAGS) -o $@ $<
