@@ -12,7 +12,7 @@ build:
 	@mkdir -p $@
 
 watch:
-	@while true; do make -q || make; sleep 1; done
+	@while true; do make -s -q || make -s; sleep 1; done
 
 %.input:
 	@[ "${AOC_COOKIE}" ] && curl -s -H "cookie: ${AOC_COOKIE}" https://adventofcode.com/$(YEAR)/day/$(shell echo $* | sed -r 's/.*day0?([0-9]+).*/\1/')/input > $@ || exit 0
